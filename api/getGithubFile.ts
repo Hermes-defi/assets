@@ -4,7 +4,12 @@ export const getFile = function (
   path: string,
 ): Promise<Response> {
   const url = `https://raw.githubusercontent.com/${repo}/${branch}/${path}`
-  return fetch(url)
+  return fetch(url, {
+    cf: {
+      cacheTtl: 30, // seconds
+      cacheEverything: true,
+    },
+  })
 }
 
 export const getGithubFileIfExists = async (

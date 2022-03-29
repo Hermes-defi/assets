@@ -47,7 +47,15 @@ router.get('/:chainString/:tokenAddress', async ({ params }) => {
     return getTokenNotFound()
   }
 
-  return file
+  const res = new Response(file.body, {
+    status: file.status,
+    headers: file.headers,
+  })
+
+  // Have the browser cache this response for 5 minutes
+  res.headers.set('Cache-Control', 'max-age=300')
+
+  return res
 })
 
 router.all('*', () => new Response('404, not found!', { status: 404 }))
