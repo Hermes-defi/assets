@@ -1,4 +1,5 @@
 import { Router } from 'itty-router'
+import { utils } from 'ethers'
 import { getGithubFileIfExists } from './getGithubFile'
 
 const router: Router = Router()
@@ -34,12 +35,26 @@ const tryFiles = async (chainString: string, tokenAddress: string) => {
   return resolvedFile
 }
 
+const getFormattedTokenAddress = (tokenAddress: string) => {
+  try {
+    return utils.getAddress(`${tokenAddress}`.toLocaleLowerCase())
+  } catch (e) {
+    return null
+  }
+}
+
 router.get('/:chainString/:tokenAddress', async ({ params }) => {
   if (!params || !params.chainString || !params.tokenAddress) {
     return new Response('Test', { status: 404 })
   }
   const chainString = decodeURIComponent(params.chainString)
-  const tokenAddress = decodeURIComponent(params.tokenAddress)
+  const tokenAddress = getFormattedTokenAddress(
+    decodeURIComponent(params.tokenAddress),
+  )
+
+  if (!tokenAddress) {
+    return new Response('Invalid Token Address', { status: 500 })
+  }
 
   const file = await tryFiles(chainString, tokenAddress)
 
