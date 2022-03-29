@@ -1,0 +1,38 @@
+{
+  "name": "hermes-defi-assets",
+  "version": "0.1.0",
+  "description": "Cloudflare worker for Hermes Defi Assets",
+  "main": "dist/worker.js",
+  "scripts": {
+    "build": "webpack",
+    "format": "prettier --write  '*.{json,js}' 'api/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+    "lint": "eslint --max-warnings=0 api && prettier --check '*.{json,js}' 'api/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+    "test": ""
+  },
+  "author": "Hermes Defi",
+  "license": "MIT",
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "typescript",
+      "prettier"
+    ]
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-typescript": "^3.0.0",
+    "miniflare": "^2.3.0",
+    "prettier": "^2.3.0",
+    "ts-loader": "^9.2.2",
+    "typescript": "^4.3.2",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0"
+  },
+  "dependencies": {
+    "itty-router": "^2.6.0"
+  }
+}

@@ -1,0 +1,12 @@
+name = "assets"
+type = "javascript"
+zone_id = ""
+account_id = "ccf8a5b6ec2dfb818699ef8a4a67456d"
+route = ""
+workers_dev = true
+compatibility_date = "2022-03-28"
+
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "service-worker"
