@@ -15,6 +15,17 @@ const getTokenNotFound = async () => {
   )
 }
 
+const hermesDefi = async (chainString: string, tokenAddress: string) => {
+  const res = await getGithubFileIfExists(
+    'Hermes-defi/assets',
+    'master',
+    `blockchains/${chainString}/assets/${tokenAddress}/logo.png`,
+  )
+  // Throw an error if the file doesn't exist, that way tryFiles knows to keep trying
+  if (res?.status !== 200) throw new Error('File not found')
+  return res
+}
+
 const sushiSwap = async (chainString: string, tokenAddress: string) => {
   const res = await getGithubFileIfExists(
     'sushiswap/assets',
@@ -29,7 +40,10 @@ const sushiSwap = async (chainString: string, tokenAddress: string) => {
 
 const tryFiles = async (chainString: string, tokenAddress: string) => {
   // Add all file source methods to Promise.any, and make sure they throw an error if the file doesn't exist
-  const resolvedFile = await Promise.any([sushiSwap(chainString, tokenAddress)])
+  const resolvedFile = await Promise.any([
+    hermesDefi(chainString, tokenAddress),
+    sushiSwap(chainString, tokenAddress),
+  ])
     // Resolve null if no sources have an icon
     .catch(() => {
       return null
