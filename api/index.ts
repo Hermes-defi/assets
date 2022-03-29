@@ -4,6 +4,9 @@ import { getGithubFileIfExists } from './getGithubFile'
 
 const router: Router = Router()
 
+// Return a 404
+const notFound = () => new Response('404, not found!', { status: 404 })
+
 const getTokenNotFound = async () => {
   return await getGithubFileIfExists(
     'Hermes-defi/assets',
@@ -45,7 +48,7 @@ const getFormattedTokenAddress = (tokenAddress: string) => {
 
 router.get('/:chainString/:tokenAddress', async ({ params }) => {
   if (!params || !params.chainString || !params.tokenAddress) {
-    return new Response('Test', { status: 404 })
+    return notFound()
   }
   const chainString = decodeURIComponent(params.chainString)
   const tokenAddress = getFormattedTokenAddress(
@@ -53,7 +56,7 @@ router.get('/:chainString/:tokenAddress', async ({ params }) => {
   )
 
   if (!tokenAddress) {
-    return new Response('Invalid Token Address', { status: 500 })
+    return notFound()
   }
 
   const file = await tryFiles(chainString, tokenAddress)
@@ -73,7 +76,7 @@ router.get('/:chainString/:tokenAddress', async ({ params }) => {
   return res
 })
 
-router.all('*', () => new Response('404, not found!', { status: 404 }))
+router.all('*', () => notFound())
 
 addEventListener('fetch', (event) => {
   event.respondWith(router.handle(event.request))
