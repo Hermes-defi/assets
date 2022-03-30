@@ -39,11 +39,14 @@ const sushiSwap = async (chainString: string, tokenAddress: string) => {
 }
 
 const tryFiles = async (chainString: string, tokenAddress: string) => {
-  // Add all file source methods to Promise.any, and make sure they throw an error if the file doesn't exist
-  const resolvedFile = await Promise.any([
-    hermesDefi(chainString, tokenAddress),
-    sushiSwap(chainString, tokenAddress),
-  ])
+  // Try Hermes Defi first
+  const hermesFile = await hermesDefi(chainString, tokenAddress).catch(
+    () => null,
+  )
+  // If the Hermes Defi repo has a match, return it
+  if (hermesFile?.status === 200) return hermesFile
+  // Add all other file source methods to Promise.any, and make sure they throw an error if the file doesn't exist
+  const resolvedFile = await Promise.any([sushiSwap(chainString, tokenAddress)])
     // Resolve null if no sources have an icon
     .catch(() => {
       return null
