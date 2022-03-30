@@ -20,10 +20,10 @@ If you are using these templates, please make sure to hide the example token lay
 ## Placement within the repository
 Now that you have your properly formatted and minified PNG file, you need to place it in the correct location. The scheme for this follows a predictable and scalable system that utilizes the CHECKSUM value of the token's contract address on each blockchain. **Importantly, this address MUST be in checksummed format.** Use https://ethsum.netlify.app/ to transform the token address into the proper checksum format.
 
-The generalized format is `./blockchains/$BLOCKCHAIN/$TOKENADDRESS/logo.png`
+The generalized format is `./blockchains/$BLOCKCHAIN/assets/$TOKENADDRESS/logo.png`
 
 For an example, here the IRIS token on Harmony.
-`./blockchains/harmony/0x85FD5f8dBD0c9Ef1806E6c7d4B787d438621C1dC/logo.png`
+`./blockchains/harmony/assets/0x85FD5f8dBD0c9Ef1806E6c7d4B787d438621C1dC/logo.png`
 
 ## Publish your token
 1. Git commit with a message like "Added TOKEN from ProjectName".
