@@ -18,5 +18,5 @@ export const getGithubFileIfExists = async (
   path: string,
 ): Promise<Response | null> => {
   const file = await getFile(repo, branch, path)
-  return file.status === 200 ? file : null
+  return file?.status === 200 ? file : null
 }

@@ -18,7 +18,7 @@ const getTokenNotFound = async () => {
 const hermesDefi = async (chainString: string, tokenAddress: string) => {
   const res = await getGithubFileIfExists(
     'Hermes-defi/assets',
-    'master',
+    'main',
     `blockchains/${chainString}/assets/${tokenAddress}/logo.png`,
   )
   // Throw an error if the file doesn't exist, that way tryFiles knows to keep trying
