@@ -1,6 +1,7 @@
 import { Router } from 'itty-router'
 import { utils } from 'ethers'
 import { getGithubFileIfExists } from './getGithubFile'
+import { getChainString } from './chains'
 
 const router: Router = Router()
 
@@ -63,11 +64,16 @@ const getFormattedTokenAddress = (tokenAddress: string) => {
   }
 }
 
-router.get('/:chainString/:tokenAddress', async ({ params }) => {
-  if (!params || !params.chainString || !params.tokenAddress) {
+router.get('/:chain/:tokenAddress', async ({ params }) => {
+  if (!params || !params.chain || !params.tokenAddress) {
     return notFound()
   }
-  const chainString = decodeURIComponent(params.chainString)
+  const chainString = getChainString(decodeURIComponent(params.chain))
+  // If the chainString is not in our map, return a 404
+  if (!chainString) {
+    return notFound()
+  }
+
   const tokenAddress = getFormattedTokenAddress(
     decodeURIComponent(params.tokenAddress),
   )
