@@ -1,4 +1,9 @@
-const chains = [
+type ChainItem = {
+  id: string
+  name: string
+}
+
+const chains: Array<ChainItem> = [
   {
     id: '1666600000',
     name: 'harmony',
@@ -12,9 +17,9 @@ const chains = [
 /**
  * Return the chain name for a given chain id OR name
  * @param chain
- * @returns
+ * @returns {string}
  */
-export const getChainString = (chain: any): string | null => {
+export const getChainString = (chain: number | string): string | null => {
   return (
     chains.find((c) => c.id === `${chain}` || c.name === `${chain}`)?.name ||
     null
