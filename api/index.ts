@@ -1,7 +1,8 @@
 import { Router } from 'itty-router'
 import { utils } from 'ethers'
 import { getGithubFileIfExists } from './getGithubFile'
-import { getChainString } from './chains'
+import { getChain } from './chains'
+import type { ChainItem } from './chains'
 
 const router: Router = Router()
 
@@ -56,9 +57,17 @@ const tryFiles = async (chainString: string, tokenAddress: string) => {
   return resolvedFile
 }
 
-const getFormattedTokenAddress = (tokenAddress: string) => {
+const getFormattedTokenAddress = (
+  chainItem: ChainItem,
+  tokenAddress: string,
+) => {
+  const lTokenAddress = `${tokenAddress}`.toLowerCase()
+  // If there's a token override, use it
+  if (chainItem.tokenOverrides?.[lTokenAddress]?.length) {
+    return chainItem.tokenOverrides[lTokenAddress]
+  }
   try {
-    return utils.getAddress(`${tokenAddress}`.toLocaleLowerCase())
+    return utils.getAddress(lTokenAddress)
   } catch (e) {
     return null
   }
@@ -68,13 +77,14 @@ router.get('/:chain/:tokenAddress', async ({ params }) => {
   if (!params || !params.chain || !params.tokenAddress) {
     return notFound()
   }
-  const chainString = getChainString(decodeURIComponent(params.chain))
+  const chainItem = getChain(decodeURIComponent(params.chain))
   // If the chainString is not in our map, return a 404
-  if (!chainString) {
+  if (!chainItem || !chainItem.name) {
     return notFound()
   }
 
   const tokenAddress = getFormattedTokenAddress(
+    chainItem,
     decodeURIComponent(params.tokenAddress),
   )
 
@@ -82,7 +92,7 @@ router.get('/:chain/:tokenAddress', async ({ params }) => {
     return notFound()
   }
 
-  const file = await tryFiles(chainString, tokenAddress)
+  const file = await tryFiles(chainItem.name, tokenAddress)
 
   if (file?.status !== 200) {
     return getTokenNotFound()
